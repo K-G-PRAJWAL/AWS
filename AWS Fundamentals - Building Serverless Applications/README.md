@@ -1,6 +1,6 @@
 # AWS Fundamentals: Building Serverless Applications
 
-This course is a part of Coursera's [AWS Fundamentals Specialization]('https://www.coursera.org/specializations/aws-fundamentals').
+This course is a part of Coursera's [AWS Fundamentals Specialization](https://www.coursera.org/specializations/aws-fundamentals).
 
 This course consists of building a serverless application over the 7 exercises that integrates various AWS services such as:
 - Amazon Lex

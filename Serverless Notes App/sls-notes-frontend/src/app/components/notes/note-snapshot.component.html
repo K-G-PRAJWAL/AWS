@@ -1,0 +1,22 @@
+<div *ngIf="isLoading">
+    <div class="div-loading">
+        <div class="spinner-container">
+            <spinner></spinner>
+        </div>
+    </div>
+</div>
+<div>
+    <div *ngIf="alert.message" class="alert alert-{{alert.type}}" role="alert">
+        {{alert.message}}
+    </div>
+    <h4 class="note-title">
+        <span class="note-title-text">
+            <i class="fas fa-thumbtack small pin" aria-hidden="true"></i>&nbsp;&nbsp;{{ note | extractTitle: 35 }}
+        </span>
+        <span class="grey trash"
+            (click)="deleteNote($event, note?.timestamp)"
+        ><i class="fas fa-trash-alt small"></i></span>
+    </h4>
+    <p class="note-content">{{ note?.content }}</p>
+    <p class="note-meta">{{ note?.timestamp * 1000 | date: 'short' }}</p>
+</div>

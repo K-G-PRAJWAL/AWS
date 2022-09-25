@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="inner-wrap">
+        <div *ngIf="isLoading">
+            <div class="spinner-container">
+                <spinner loadingText="Loading...Please wait."></spinner>
+            </div>
+        </div>
+        <div class="alert alert-warning" *ngIf="noNotesFound">
+            <div class="message-wrap">
+                <span>Hey there! Welcome to the Serverless Notes App.</span>
+                <button class="btn btn-success auto_left_margin" (click)="onShowNoteModal($event)">Click to create your first note</button>
+            </div>
+        </div>
+        <div *ngIf="alert.message" class="alert alert-{{alert.type}}" role="alert">
+            {{alert.message}}
+        </div>
+        <div class="list-group-container" 
+            infinite-scroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="350"
+            (scrolled)="onScrollDown()"
+            >
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let note of userNotes"
+                    (click)="openNote(note)">
+                    <note-snapshot class="note-snapshot" 
+                        [note]="note"
+                        (deleteNoteEvent)="deleteNote(note)"
+                        (refreshNotesEvent)="refreshNotes()"
+                    ></note-snapshot>
+                </li>
+            </ul>
+            <div class="list-loading" *ngIf="isListLoading">
+                <div class="spinner-container">
+                    <spinner></spinner>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <note class="page-modal" 
+        *ngIf="showNote" 
+        [note]="selectedNote"
+        (updateNoteEvent)="updateNote($event)"
+        (closeModalEvent)="onCloseNoteModal()"
+    ></note>
+</div>

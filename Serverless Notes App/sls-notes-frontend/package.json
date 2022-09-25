@@ -1,0 +1,51 @@
+{
+  "name": "sls-notes-app",
+  "version": "1.0.0",
+  "description": "Serverless Notes taking SPA demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node local-server.js",
+    "build": "del-cli public && webpack --config webpack.config.dev.js --progress --profile",
+    "build:watch": "npm run build -- --watch",
+    "build:prod": "del-cli public && ngc -p tsconfig.aot.json && ngc -p tsconfig.aot.json && webpack --config webpack.config.prod.js --progress --profile --bail && del-cli src/app/**/*.js src/app/**/*.ngfactory.ts src/app/**/*.js.map src/app/**/*.shim.ts src/app/**/*.ngsummary.json src/app/**/*.ngstyle.ts  src/polyfills.ngsummary.json"
+  },
+  "author": "K G Prajwal",
+  "license": "ISC",
+  "dependencies": {
+    "@angular/animations": "^6.0.0",
+    "@angular/common": "^6.0.0",
+    "@angular/compiler": "^6.0.0",
+    "@angular/compiler-cli": "^6.0.0",
+    "@angular/core": "^6.0.0",
+    "@angular/forms": "^6.0.0",
+    "@angular/http": "^6.0.0",
+    "@angular/platform-browser": "^6.0.0",
+    "@angular/platform-browser-dynamic": "^6.0.0",
+    "@angular/platform-server": "^6.0.0",
+    "@angular/router": "^6.0.0",
+    "@angular/upgrade": "^6.0.0",
+    "@types/aws4": "^1.5.1",
+    "aws4": "^1.8.0",
+    "core-js": "^2.5.7",
+    "ngx-infinite-scroll": "^6.0.1",
+    "rxjs": "^6.3.2",
+    "zone.js": "^0.8.26"
+  },
+  "devDependencies": {
+    "@ngtools/webpack": "^1.10.2",
+    "@types/core-js": "^0.9.46",
+    "@types/node": "^6.0.117",
+    "angular-router-loader": "^0.6.0",
+    "angular2-template-loader": "^0.6.2",
+    "awesome-typescript-loader": "^3.5.0",
+    "copy-webpack-plugin": "^4.5.2",
+    "del-cli": "^0.2.1",
+    "html-loader": "^0.4.5",
+    "html-webpack-plugin": "^2.30.1",
+    "raw-loader": "^0.5.1",
+    "typescript": "^2.9.2",
+    "webpack": "^2.7.0",
+    "webpack-merge": "^4.1.4",
+    "express": "^4.16.3"
+  }
+}

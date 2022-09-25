@@ -1,0 +1,73 @@
+<div class="note-modal page-modal">
+    <div class="container">
+        <div class="card">
+            <div *ngIf="isLoading" class="loading-overlay"></div>
+            <div class="card-body">
+                <div class="note-actions flex-space">
+                    <span class="note-meta">
+                        <span *ngIf="note?.timestamp">
+                            Created {{ note?.timestamp * 1000 | date: 'short' }}
+                        </span>
+                    </span>
+                    <span id="page-modal-close" class="page-modal-button" (click)="onCloseNoteModal($event)">
+                        <i class="fas fa-times"></i>
+                        <span class="key-label">Esc</span>
+                    </span>
+                </div>
+                <div *ngIf="alert.message" class="alert alert-{{alert.type}}" role="alert">
+                    {{alert.message}}
+                </div>
+                <div *ngIf="isLoading">
+                    <div class="div-loading">
+                        <div class="spinner-container">
+                            <spinner></spinner>
+                        </div>
+                    </div>
+                </div>
+                <form [formGroup]="noteForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <i class="fas fa-thumbtack small pin" aria-hidden="true"></i>
+                            <input name="title" 
+                                id="title" 
+                                type="text" 
+                                class="form-control" 
+                                placeholder="{{defaultTitle}}"
+                                formControlName="title" 
+                                value="{{note?.title}}"
+                            >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="content" 
+                            id="content" 
+                            cols="30" 
+                            rows="4" 
+                            class="form-control" 
+                            placeholder="Take a note..."
+                            formControlName="content" 
+                            #focus
+                            value="{{note?.content}}"
+                        ></textarea>
+                        
+                    </div>
+                    <input type="hidden" name="cat" id="cat" formControlName="cat" value="{{note?.cat}}">
+                    <input type="hidden" name="timestamp" id="timestamp" formControlName="timestamp" value="{{note?.timestamp}}">
+                    <input type="hidden" name="note_id" id="note_id" formControlName="note_id" value="{{note?.note_id}}">
+                    <div class="form-group flex-space">
+                        <div>
+                            <span class="form-validation-alert soft-alert"
+                                *ngIf="noteForm.controls['content'].touched && !noteForm.controls['content'].valid"
+                            >Please type in a note.</span>
+                        </div>
+                        <button  type="submit" class="btn btn-primary" [disabled]="!noteForm.valid || disableSubmit">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
+                            <span>Save Note</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

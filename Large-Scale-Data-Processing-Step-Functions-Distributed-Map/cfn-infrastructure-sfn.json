@@ -1,0 +1,84 @@
+{
+    "Comment": "A description of my state machine",
+    "StartAt": "S3 object keys",
+    "States": {
+      "S3 object keys": {
+        "Type": "Map",
+        "ItemProcessor": {
+          "ProcessorConfig": {
+            "Mode": "DISTRIBUTED",
+            "ExecutionType": "EXPRESS"
+          },
+          "StartAt": "TemperaturesFunction",
+          "States": {
+            "TemperaturesFunction": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:eu-west-1:669271927657:function:sfw-module-distributed-map-TemperaturesFunction-KSvfTn1ER1LQ:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
+                  "IntervalSeconds": 1,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2
+                }
+              ],
+              "End": true
+            }
+          }
+        },
+        "ItemReader": {
+          "Resource": "arn:aws:states:::s3:listObjectsV2",
+          "Parameters": {
+            "Bucket": "sfw-module-distributed-m-distributedmapworkshopda-1de1f57j3n1wi"
+          }
+        },
+        "MaxConcurrency": 500,
+        "Label": "S3objectkeys",
+        "ItemBatcher": {
+          "MaxItemsPerBatch": 500
+        },
+        "ToleratedFailurePercentage": 5,
+        "ResultWriter": {
+          "Resource": "arn:aws:states:::s3:putObject",
+          "Parameters": {
+            "Bucket": "sfw-module-distributed-m-distributedmapresultsbuc-6v2w50b4guiq",
+            "Prefix": "results"
+          }
+        },
+        "Next": "ReducerFunction"
+      },
+      "ReducerFunction": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$",
+          "FunctionName": "arn:aws:lambda:eu-west-1:669271927657:function:sfw-module-distributed-map-ReducerFunction-QZnYBTgBd1IW:$LATEST"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ],
+            "IntervalSeconds": 1,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
+        "End": true
+      }
+    }
+  }

@@ -1,0 +1,60 @@
+{
+    "Comment": "A description of my state machine",
+    "StartAt": "ProcessVideos",
+    "States": {
+      "ProcessVideos": {
+        "Type": "Map",
+        "ItemProcessor": {
+          "ProcessorConfig": {
+            "Mode": "INLINE"
+          },
+          "StartAt": "ProcessVideo",
+          "States": {
+            "ProcessVideo": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::ecs:runTask.waitForTaskToken",
+              "Parameters": {
+                "LaunchType": "FARGATE",
+                "Cluster": "arn:aws:ecs:eu-west-1:669271927657:cluster/VideoProcessingCluster",
+                "TaskDefinition": "arn:aws:ecs:eu-west-1:669271927657:task-definition/VideoProcessingStackTaskDefinition:1",
+                "NetworkConfiguration": {
+                  "AwsvpcConfiguration": {
+                    "Subnets": [
+                      "subnet-0469896f227858f7d",
+                      "subnet-0ba9ffc22441e2de1"
+                    ],
+                    "SecurityGroups": [
+                      "sg-0fe7c470b60ba479f"
+                    ]
+                  }
+                },
+                "Overrides": {
+                  "ContainerOverrides": [
+                    {
+                      "Name": "VideoProcessor",
+                      "Environment": [
+                        {
+                          "Name": "TASK_TOKEN",
+                          "Value.$": "$$.Task.Token"
+                        },
+                        {
+                          "Name": "S3_BUCKET",
+                          "Value": "sfw-module-map-ecs-videoprocessingouputbucket-a25l5rlixqbn"
+                        },
+                        {
+                          "Name": "VIDEO_URL",
+                          "Value.$": "$"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "End": true
+            }
+          }
+        },
+        "End": true
+      }
+    }
+  }
